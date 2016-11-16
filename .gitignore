@@ -10,6 +10,12 @@ local.properties
 .loadpath
 .recommenders
 
+#For omitting Data
+data/
+
+#For csv file
+*.csv
+
 # Eclipse Core
 .project
 
