@@ -18,7 +18,7 @@ data/
 
 
 #For csv file
-*.csv
+#*.csv
 
 # Eclipse Core
 .project
