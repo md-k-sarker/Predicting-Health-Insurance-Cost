@@ -9,9 +9,13 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+src/__pycache__/
 
 #For omitting Data
 data/
+processedData/
+
+
 
 #For csv file
 *.csv

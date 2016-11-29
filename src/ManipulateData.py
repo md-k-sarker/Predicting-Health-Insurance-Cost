@@ -6,6 +6,8 @@ Created on Sep 24, 2016
 import csv
 import numpy as np
 
+
+
 def getDataMatrixFromCSV(fileName):
     dataMatrix = np.array(list(csv.reader(open(fileName, "r+"), delimiter=',')))
     
@@ -17,7 +19,7 @@ def shuffleData(dataMatrix):
 
 def convertDatatoFloat(dataMatrix):
     dataMatrixAsfloat = [ [ np.float128(eachVal) for eachVal in row ] for row in dataMatrix]
-    return dataMatrixAsfloat   
+    return np.array(dataMatrixAsfloat)   
 
 def convertDatatoZeroOne(dataList):
     dataAsZeroOne = [] 
@@ -30,16 +32,22 @@ def convertDatatoZeroOne(dataList):
     return dataAsZeroOne 
 
 def getNormalizedData(dataMatrix):
+    
+    dataMatrix = np.array(dataMatrix)
     normalizedDatas = [] 
-    for dataList in dataMatrix:
-        _mean = sum(dataList) / float(len(dataList))
-        _max = max(dataList)
-        _min = min(dataList)
+    
+    for i in range(0,dataMatrix.shape[1]):
+        
+        columnData = dataMatrix[:,i]
+        _mean = np.mean(columnData)
+        _max = np.max(columnData)
+        _min = np.min(columnData)
         
         normalizedData = []
-           
-        for eachVal in dataList:     
-            normalizedData.append((eachVal - _mean) / (_max - _min))
+        
+        for eachData in columnData:
+            normalizedData.append((eachData - _mean) / (_max - _mean))
+        
         normalizedDatas.append(normalizedData)
         
     return np.array(normalizedDatas)
