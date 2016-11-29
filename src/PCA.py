@@ -18,6 +18,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
 import re
 
+from sklearn.feature_selection import chi2
+
 
 
 fileName = '../processedData/DeathRecordsConvertedToInteger.csv' 

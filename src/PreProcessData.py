@@ -132,7 +132,7 @@ def changeStringToInteger(fileName, cols, hasColumnHeader):
                     c20.append(3)
                 else:
                     c20.append(3)
-                    print('C20: ', rowData)
+                    
         
         '''Column 21 = Autopsy: 
         Y = Yes     = 0
@@ -161,6 +161,54 @@ def changeStringToInteger(fileName, cols, hasColumnHeader):
     
     return dataMatrix
 
+'''change output variable ICD10 codes into integer values
+Explanantion: https://en.wikipedia.org/wiki/ICD-10#List
+'''        
+
+def mapICD10CodetoInteger(ICD10Codes):
+    
+    integerCodes = []
+    for icd10Code in ICD10Codes:
+        if(icd10Code.startswith('A') or icd10Code.startswith('B')):
+            integerCodes.append(0)
+        elif(icd10Code.startswith('C') or icd10Code.startswith('D0') or icd10Code.startswith('D1') or icd10Code.startswith('D2') or icd10Code.startswith('D3') or icd10Code.startswith('D4')):
+            integerCodes.append(1)
+        elif(icd10Code.startswith('D5') or icd10Code.startswith('D6') or icd10Code.startswith('D7') or icd10Code.startswith('D8')):
+            integerCodes.append(2)
+        elif(icd10Code.startswith('E')):
+            integerCodes.append(3)
+        elif(icd10Code.startswith('F')):
+            integerCodes.append(4)
+        elif(icd10Code.startswith('G')):
+            integerCodes.append(5)
+        elif(icd10Code.startswith('H0') or icd10Code.startswith('H1') or icd10Code.startswith('H2') or icd10Code.startswith('H3') or icd10Code.startswith('H4') or icd10Code.startswith('H5')):
+            integerCodes.append(6)
+        elif(icd10Code.startswith('H6') or icd10Code.startswith('H7') or icd10Code.startswith('H8') or icd10Code.startswith('H9')):
+            integerCodes.append(7)
+        elif(icd10Code.startswith('I')):
+            integerCodes.append(8)
+        elif(icd10Code.startswith('J')):
+            integerCodes.append(9)
+        elif(icd10Code.startswith('K')):
+            integerCodes.append(10)
+        elif(icd10Code.startswith('L')):
+            integerCodes.append(11)
+        elif(icd10Code.startswith('M')):
+            integerCodes.append(12)
+        elif(icd10Code.startswith('N')):
+            integerCodes.append(13)
+        elif(icd10Code.startswith('O') or icd10Code.startswith('0')):
+            integerCodes.append(14)
+        elif(icd10Code.startswith('P')):
+            integerCodes.append(15)
+        elif(icd10Code.startswith('Q')):
+            integerCodes.append(16)
+        elif(icd10Code.startswith('R')):
+            integerCodes.append(17)
+        else:
+            print(icd10Code)
+    
+    return integerCodes
 
 
 '''Be sure about where you has the file and where you want to put the resultant file'''
@@ -169,20 +217,20 @@ deathRecordsOnlyDiseaseFile = '../processedData/DeathRecordsOnlyDisease.csv'
 deathRecordsConvertedToIntegerFile = '../processedData/DeathRecordsConvertedToInteger.csv'
 
 '''Get and Write only diesease data samples'''
-getOnlyDiseaseData(actualDataFile, deathRecordsOnlyDiseaseFile)
+# getOnlyDiseaseData(actualDataFile, deathRecordsOnlyDiseaseFile)
 
-'''transform the data into integer format'''
+'''transform the data into integer format. only the input features.'''
 cols = [6, 15, 18, 20, 21]
 dataMatrix = changeStringToInteger(deathRecordsOnlyDiseaseFile , cols , True) 
+ 
+'''change the output or icd10codes'''                
+dataMatrix[ : , 24] = mapICD10CodetoInteger(dataMatrix[:, 24])
 
 '''write the converted values to file'''
 with open(deathRecordsConvertedToIntegerFile, 'w') as csvfile:
     writer = csv.writer(csvfile , delimiter=',')
     for row in dataMatrix:
-        writer.writerow(row)
-        
-
-    
+        writer.writerow(row)    
        
 
 # 

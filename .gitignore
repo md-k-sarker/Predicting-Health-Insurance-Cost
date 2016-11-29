@@ -13,7 +13,7 @@ src/__pycache__/
 
 #For omitting Data
 data/
-processedData/
+#processedData/
 
 
 
