@@ -6,7 +6,7 @@ Created on Nov 16, 2016
 
 import os
 import numpy as np
-import ManipulateData as mpd
+import DataIOFactory as dataIO
 import csv
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
@@ -26,7 +26,7 @@ This method also write the data-samples into files.
 '''
 def getOnlyDiseaseData(inputFileName, outputFileName):
 
-    dataMatrixWithLabel = mpd.getDataMatrixFromCSV(inputFileName)
+    dataMatrixWithLabel = dataIO.getDataMatrixFromCSV(inputFileName)
     
     '''ICD10Code = column 24'''
     icd10Codes = dataMatrixWithLabel[:, 24]
@@ -54,7 +54,7 @@ def getOnlyDiseaseData(inputFileName, outputFileName):
 
 '''This method maps the string value to integer values'''
 def changeStringToInteger(fileName, cols, hasColumnHeader):
-    dataMatrixWithLabel = mpd.getDataMatrixFromCSV(fileName)
+    dataMatrixWithLabel = dataIO.getDataMatrixFromCSV(fileName)
     
     '''remove the column_Header/label_of_the_column from the data'''
     if(hasColumnHeader):
@@ -245,12 +245,12 @@ with open(deathRecordsConvertedToIntegerFile, 'w') as csvfile:
 # 
 # 
 # '''convert to float'''
-# X = mpd.convertDatatoFloat(X)
-# Y = mpd.convertDatatoFloat(Y)
+# X = dataIO.convertDatatoFloat(X)
+# Y = dataIO.convertDatatoFloat(Y)
 # 
 # 
 # '''Split into train, test and validation'''
-# trainX, trainY, validationX, validationY, testX, testY = mpd.splitTrainValidateAndTestData(X, Y, 0.6, 0.2, 0.2)
+# trainX, trainY, validationX, validationY, testX, testY = dataIO.splitTrainValidateAndTestData(X, Y, 0.6, 0.2, 0.2)
 # 
 # print(trainX.shape, trainY.shape)
 # 

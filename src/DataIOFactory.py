@@ -15,11 +15,15 @@ def getDataMatrixFromCSV(fileName):
 
 def shuffleData(dataMatrix):
     dataMatrix = np.random.permutation(dataMatrix)
-    return dataMatrix
+    return dataMatrix 
 
-def convertDatatoFloat(dataMatrix):
-    dataMatrixAsfloat = [ [ np.float128(eachVal) for eachVal in row ] for row in dataMatrix]
-    return np.array(dataMatrixAsfloat)   
+def convertDatatoFloat(data,isMatrix):
+    if(isMatrix):
+        dataMatrixAsfloat = [ [ np.float128(eachVal) for eachVal in row ] for row in data]
+        return np.array(dataMatrixAsfloat) 
+    else:
+        dataListAsfloat = [ np.float128(eachVal) for eachVal in data]
+        return dataListAsfloat  
 
 def convertDatatoZeroOne(dataList):
     dataAsZeroOne = [] 
