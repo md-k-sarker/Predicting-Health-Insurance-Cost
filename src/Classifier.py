@@ -25,6 +25,8 @@ from sklearn import feature_selection
 from sklearn.feature_selection import f_classif
 import matplotlib.pyplot as plt
 from matplotlib import colors
+import time
+from sklearn.neighbors.nearest_centroid import NearestCentroid
 
 # import six
 # import math
@@ -32,8 +34,9 @@ from matplotlib import colors
 
 
 def classifyUsingSVM(trainX, trainY, testX, testY):
+    print('################# classifyUsingSVM() started ##################')
+    start_time = time.time()
     
-    print('SVM called')
     clf = svm.SVC(kernel='rbf')
     print('SVM Initialized')
     
@@ -53,18 +56,23 @@ def classifyUsingSVM(trainX, trainY, testX, testY):
     print('confusionMatrix: ', confusionMatrix)
     print('f1Score: ', f1Score)
 
+    print('################# classifyUsingSVM() finished ##################')
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
 
 def classifyUsingRandomForest(trainX, trainY, testX, testY):
     
-    print('SVM called')
-    clf = svm.SVC(kernel='rbf')
-    print('SVM Initialized')
+    print('################# classifyUsingRandomForest() started ##################')
+    start_time = time.time()
+    
+    clf = RandomForestClassifier(n_estimators=100,verbose=1 )
+    print('classifyUsingRandomForest Initialized')
     
     clf.fit(trainX, trainY)
-    print('SVM Trained')
+    print('classifyUsingRandomForest Trained')
     
     predictedY = clf.predict(testX)
-    print('SVM prediction completed')
+    print('classifyUsingRandomForest prediction completed')
  
     accuracy = accuracy_score(testY, predictedY)
      
@@ -75,7 +83,42 @@ def classifyUsingRandomForest(trainX, trainY, testX, testY):
     print('accuracy:', accuracy) 
     print('confusionMatrix: ', confusionMatrix)
     print('f1Score: ', f1Score)
+    
+    print('################# classifyUsingRandomForest() finished ##################')
+    print("--- %s seconds ---" % (time.time() - start_time))
+ 
 
+def classifyUsingKNNCentroid(trainX, trainY, testX, testY):
+    
+    print('################# classifyUsingKNNCentroid() started ##################')
+    start_time = time.time()
+    
+    clf = NearestCentroid()
+    print('KNN Initialized')
+    
+    clf.fit(trainX, trainY)
+    print('KNN Trained')
+    
+    predictedY = clf.predict(testX)
+    print('KNN prediction completed')
+ 
+    accuracy = accuracy_score(testY, predictedY)
+     
+    confusionMatrix = confusion_matrix(testY , predictedY)
+     
+    f1Score = f1_score(testY, predictedY, average='weighted')
+    
+    print('accuracy:', accuracy) 
+    print('confusionMatrix: ', confusionMatrix)
+    print('f1Score: ', f1Score)
+    
+    print('################# classifyUsingKNNCentroid() finished ##################')
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+        
+
+
+balancedDataConvertedToIntegerFile = '../processedData/balancedDataConvertedToInteger.csv'
 
 fileName = '../processedData/DeathRecordsConvertedToInteger.csv' 
 dataMatrix = dataIO.getDataMatrixFromCSV(fileName)
@@ -98,13 +141,22 @@ NumberOfRecordAxisConditions'''
 X = np.delete(dataMatrix, [0, 24, 29, 30], axis=1)
 columnNames = np.delete(columnNames, [0, 24, 29, 30])
 
-X = dataIO.convertDatatoFloat(X)
+X = dataIO.convertDatatoFloat(X, True)
+Y = dataIO.convertDatatoFloat(Y, False)
 
 print('Data loaded into memory')
+print('np.unique(Y): ',np.sort( np.unique(Y)))
 
-trainInputData, trainOutputVector, validationInputData, validationOutputVector, \
-    testInputData, testOutputVector = dataIO.splitTrainValidateAndTestData(X, Y, .6, .2, .2)
+trainInputData, trainOutputVector, testInputData, testOutputVector = dataIO.splitTrainAndTestData(X, Y, .7,)
 
 print('Data splitted into Test and Train')
+print('trainInputData.shape: ',trainInputData.shape, 'trainOutputVector.shape: ', trainOutputVector.shape)
 
-classifyUsingSVM(trainInputData,trainOutputVector,testInputData,testOutputVector)
+print('np.unique(trainOutputVector): ',np.sort(np.unique(trainOutputVector)))
+
+
+classifyUsingKNNCentroid(trainInputData, trainOutputVector, testInputData, testOutputVector)
+# 
+classifyUsingRandomForest(trainInputData, trainOutputVector, testInputData, testOutputVector)
+
+classifyUsingSVM(trainInputData, trainOutputVector, testInputData, testOutputVector)

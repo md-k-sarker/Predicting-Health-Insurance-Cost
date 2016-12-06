@@ -99,10 +99,15 @@ def splitintoNFold(l, n):
     n = max(1, n)
     return (l[i:i + n] for i in range(0, len(l), n))
 
-def splitTrainAndTestData(data, ratio):
-    trainData = data[:int(len(data) * ratio)]
-    testData = data[int(len(data) * ratio):]
-    return trainData, testData
+def splitTrainAndTestData(inputData, outputVector, ratio):
+    dataLength = len(inputData)
+    trainInputData = np.array(inputData[ :int(dataLength * ratio) ])
+    trainOutputVector = np.array(outputVector[ :int(dataLength * ratio) ])
+    
+    testInputData = np.array(inputData[ int(dataLength * ratio) :  ])
+    testOutputVector = np.array(outputVector[ int(dataLength * ratio) :  ])
+    
+    return trainInputData, trainOutputVector, testInputData, testOutputVector
 
 def splitTrainValidateAndTestData(inputData, outputVector, ratio1, ratio2, ratio3):
     dataLength = len(inputData)

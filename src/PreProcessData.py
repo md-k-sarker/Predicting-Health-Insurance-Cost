@@ -13,6 +13,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import f1_score
 import re
+import Util as Util
+import time
 
 
 '''
@@ -54,6 +56,8 @@ def getOnlyDiseaseData(inputFileName, outputFileName):
 
 '''This method maps the string value to integer values'''
 def changeStringToInteger(fileName, cols, hasColumnHeader):
+    print('################# changeStringToInteger() started##################')
+    start_time = time.time()
     dataMatrixWithLabel = dataIO.getDataMatrixFromCSV(fileName)
     
     '''remove the column_Header/label_of_the_column from the data'''
@@ -159,6 +163,8 @@ def changeStringToInteger(fileName, cols, hasColumnHeader):
     dataMatrix[:, 20] = c20
     dataMatrix[:, 21] = c21
     
+    print('################# changeStringToInteger() finished ##################')
+    print("--- %s seconds ---" % (time.time() - start_time))
     return dataMatrix
 
 '''change output variable ICD10 codes into integer values
@@ -166,6 +172,8 @@ Explanantion: https://en.wikipedia.org/wiki/ICD-10#List
 '''        
 
 def mapICD10CodetoInteger(ICD10Codes):
+    print('################# mapICD10CodetoInteger() started ##################')
+    start_time = time.time()
     
     integerCodes = []
     for icd10Code in ICD10Codes:
@@ -208,6 +216,9 @@ def mapICD10CodetoInteger(ICD10Codes):
         else:
             print(icd10Code)
     
+    print('################# mapICD10CodetoInteger() finished ##################')
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
     return integerCodes
 
 
@@ -215,19 +226,21 @@ def mapICD10CodetoInteger(ICD10Codes):
 actualDataFile = '../data/DeathRecords/DeathRecords.csv'
 deathRecordsOnlyDiseaseFile = '../processedData/DeathRecordsOnlyDisease.csv'
 deathRecordsConvertedToIntegerFile = '../processedData/DeathRecordsConvertedToInteger.csv'
+actualBalancedDataFile = '../processedData/balancedDataRaw.csv'
+balancedDataConvertedToIntegerFile = '../processedData/balancedDataConvertedToInteger.csv'
 
 '''Get and Write only diesease data samples'''
 # getOnlyDiseaseData(actualDataFile, deathRecordsOnlyDiseaseFile)
 
 '''transform the data into integer format. only the input features.'''
 cols = [6, 15, 18, 20, 21]
-dataMatrix = changeStringToInteger(deathRecordsOnlyDiseaseFile , cols , True) 
+dataMatrix = changeStringToInteger(actualBalancedDataFile , cols , True) 
  
 '''change the output or icd10codes'''                
 dataMatrix[ : , 24] = mapICD10CodetoInteger(dataMatrix[:, 24])
 
 '''write the converted values to file'''
-with open(deathRecordsConvertedToIntegerFile, 'w') as csvfile:
+with open(balancedDataConvertedToIntegerFile, 'w') as csvfile:
     writer = csv.writer(csvfile , delimiter=',')
     for row in dataMatrix:
         writer.writerow(row)    

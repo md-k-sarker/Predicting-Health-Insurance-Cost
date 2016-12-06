@@ -27,6 +27,7 @@ import six
 import math
 import sklearn
 import matplotlib.pyplot as plt
+import Util as Util
 
 
 
@@ -77,9 +78,10 @@ def featuresFromFeatureSelection(X,Y,columnNames):
 def loadData():
     print('##############loadData()###############')
     #fileName = '../processedData/1000Records.csv' 
+    balancedDataConvertedToIntegerFile = '../processedData/balancedDataConvertedToInteger.csv'
     fileName = '../processedData/DeathRecordsConvertedToInteger.csv'
     
-    dataMatrix = dataIO.getDataMatrixFromCSV(fileName)
+    dataMatrix = dataIO.getDataMatrixFromCSV(balancedDataConvertedToIntegerFile)
     
     '''remove the column_Header/label_of_the_column from the data'''
     columnNames = dataMatrix[0:1]
@@ -104,7 +106,36 @@ def loadData():
     print('##############loadData() completed###############')
     return X, Y, columnNames
 
+def plotFeatureStats(X,columnNames):
+    
+    colors = Util.getColorNames()
+    hatches = Util.getHatches()
+    
+    means = np.mean(X, axis = 0)
+    stds = np.std(X, axis = 0)
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    
+#     for i,m in zip(range(X.shape[1]),means):
+#         ax.bar(i, m , color=colors[i], hatch = '/' , label = 'Mean' )
+#         
+#     for i,s in zip(range(X.shape[1]),stds):
+#         ax.bar(i, s, color=colors[i], hatch = '#', label = 'Std' )
 
+    ax.boxplot(X)
+    
+    plt.ylabel('Mean and standard deviation of each feature')
+    plt.xlabel('Features.')
+    plt.title('Each feature with mean and standard deviation')
+    print(columnNames[17], columnNames[16])
+    
+    l = [8,10,24,25]
+    #for i in col:
+    print(columnNames)
+    #plt.legend(columnNames, bbox_to_anchor=(0., 0.8, 1., .102), loc=3,ncol=5, mode="expand", borderaxespad=0.)
+ 
+    plt.show()
 
 def plotClassImbalance(Y):
     '''plot the output data'''
@@ -144,11 +175,18 @@ def plotScatterPlotFor18Classes(Y,featureN):
     print('Figure configuration started') 
     colors = getColorNames()
     counter = 0
+    
+    '''get 18 different list for each classes'''
+    classes = []
+    
     for x,y in zip(featureN,Y):    
         plt.scatter(x,y,color=colors[int(y)])
         counter +=1       
-        print(counter)
-         
+    
+    
+    legends = ['Class '+str(i) for i in Y]
+    
+    plt.legend(legends)     
     plt.xlabel('InfantCauseRecode130')
     plt.ylabel('Classes')
     plt.title('InfantCauseRecode130 vs different classes')
@@ -174,9 +212,11 @@ def getFeatureN(X,columnNames):
 #plotScatterPlot()
 X, Y, columnNames = loadData()
 
-featureN = getFeatureN(X, columnNames)
+plotFeatureStats(X,columnNames)
 
-plotScatterPlotFor18Classes(Y, featureN)
+#featureN = getFeatureN(X, columnNames)
+
+#plotScatterPlotFor18Classes(Y, featureN)
 
 #featuresFromFeatureSelection(X, Y, columnNames)
 
