@@ -5,8 +5,15 @@
 
 ##Prediction [Will try to predict how a person is prone to disease]
 
+##Class Imbalance
+Has high class imbalance <img src="https://raw.githubusercontent.com/md-k-sarker/ML-Analyze-Morality/master/results/classImbalance_scaled.png"></img>
+
 
 ##Feature information: 
+
+###Median and Quartile of each features
+
+<img src="https://raw.githubusercontent.com/md-k-sarker/ML-Analyze-Morality/master/results/featureStatsWithoutFeature17.png"></img>
 
 <ul>
 <li>Id (integer primary key) - Main identifier, used for joining with DeathRecordId in EntityAxisConditions and RecordAxisConditions tables. </li>
